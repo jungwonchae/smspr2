@@ -17,18 +17,18 @@
             contentType : 'application/json; charset=utf-8',
             data: JSON.stringify({
                 title : "제목1"
-                , author: "작성자1"
-                , content: "내용1"
+                ,author : "작성자1"
+                ,content : "내용1"
             }),
-                cache: false,
-                success: (data, status, xhr)=>{
-                    //alert("success!!");
-                    alert(JSON.stringify(data));
-                },
-                error: (data, status, xhr)=>{
-                    alert("error!! ");
-                    alert(JSON.stringify(data));
-                }
+            cache: false,
+            success: (data, status, xhr)=>{
+                //alert("success!!");
+                alert(JSON.stringify(data));
+            },
+            error: (data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(data));
+            }
         });
     }
 </script>
