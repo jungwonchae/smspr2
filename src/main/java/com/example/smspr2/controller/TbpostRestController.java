@@ -42,5 +42,16 @@ public class TbpostRestController {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.update(param));
     }
 
+    @Operation(summary = "게시글 조회",
+            description = "게시글 조회 컨트롤러 (사용자만 접근 가능) <br />"
+                    + "@param TbpostDto.SelectReqDto <br />"
+                    + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbpostDto.SelectResDto\\> <br />"
+                    + "@exception 필수 파라미터 누락하였을 때 등 <br />"
+    )
+    @GetMapping("")
+    public ResponseEntity<TbpostDto.SelectResDto> detail(@Valid @RequestBody TbpostDto.SelectReqDto param){
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(param));
+    }
+
 
 }
