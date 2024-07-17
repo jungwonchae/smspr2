@@ -25,6 +25,8 @@ public class Tbpost extends AuditingFields {
     @Setter @Column(nullable = true, length = 10000) @Lob private String content;
     //@Lob -> Binary Large Object(BLOB), Character Large Object(CLOB) 매핑
 
+
+    //of로만 만들게 하기 위해 protected 로 막기
     protected Tbpost() {}
     private Tbpost(String title, String author, String content) {
         this.title = title;
