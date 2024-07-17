@@ -33,6 +33,7 @@ public class TbpostDto {
         @Size(max=400)
         private String content;
 
+        //Tbpost 수정 후 추가
         public Tbpost toEntity(){
             return Tbpost.of(title, author, content);
         }
