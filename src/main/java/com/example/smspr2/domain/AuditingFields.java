@@ -1,17 +1,23 @@
 package com.example.smspr2.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@ToString
+@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass
 public abstract class AuditingFields {
+
         @Id
         private String id;
 
