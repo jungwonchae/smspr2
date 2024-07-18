@@ -2,6 +2,7 @@ package com.example.smspr2.service.impl;
 
 import com.example.smspr2.domain.Tbpost;
 import com.example.smspr2.dto.TbpostDto;
+import com.example.smspr2.mapper.TbpostMapper;
 import com.example.smspr2.repository.TbpostRepository;
 import com.example.smspr2.service.TbpostService;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,14 @@ import org.springframework.stereotype.Service;
 public class TbpostServiceImpl implements TbpostService {
 
     private TbpostRepository tbpostRepository;
-    public TbpostServiceImpl(TbpostRepository tbpostRepository) {
+    private TbpostMapper tbpostMapper;
+
+    public TbpostServiceImpl(
+            TbpostRepository tbpostRepository
+            ,TbpostMapper tbpostMapper
+    ) {
         this.tbpostRepository = tbpostRepository;
+        this.tbpostMapper = tbpostMapper;
     }
 
     @Override
@@ -35,6 +42,8 @@ public class TbpostServiceImpl implements TbpostService {
 
     @Override
     public TbpostDto.SelectResDto detail(TbpostDto.SelectReqDto param) {
+
+        /*
         Tbpost tbpost = tbpostRepository.findById(param.getId()).orElseThrow(()->new RuntimeException("no data"));
         TbpostDto.SelectResDto selectResDto =  TbpostDto.SelectResDto.builder()
                 .id(tbpost.getId())
@@ -44,6 +53,11 @@ public class TbpostServiceImpl implements TbpostService {
                 .author(tbpost.getAuthor())
                 .content(tbpost.getContent())
                 .build();
+         */
+        TbpostDto.SelectResDto selectResDto = new tbpostMapper.detail(param);
+        if(selectResDto == null){
+            throw new RuntimeException("no data");
+        }
         return selectResDto;
     }
 }
