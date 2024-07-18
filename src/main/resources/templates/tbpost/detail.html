@@ -11,11 +11,18 @@ id :
 <input id="detail_tbpost_id" type="text" />
 title :
 <input id="detail_tbpost_title" type="text" />
+author :
+<input id="detail_tbpost_author" type="text" />
+content :
+<input id="detail_tbpost_content" type="text" />
 
 <button onclick="detail_tbpost()">detail</button>
 <button onclick="update_tbpost()">update</button>
 
 <script>
+    function getIdFromUrl(obj){
+        let
+    }
     function detail_tbpost(){
         $.ajax({
             url: "/api/tbpost",
