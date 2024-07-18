@@ -105,4 +105,19 @@ public class TbpostDto {
         private String author;
         private String content;
     }
+
+    @Builder
+    @Schema
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ListReqDto{
+        @Schema(description = "deleted", example="")
+        private String deleted;
+        @Schema(description="title", example = "")
+        private String title;
+        @Schema(description="author", example = "")
+        private String author;
+    }
 }
