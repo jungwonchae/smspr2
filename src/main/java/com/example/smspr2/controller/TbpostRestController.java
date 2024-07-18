@@ -40,7 +40,7 @@ public class TbpostRestController {
     @PutMapping("")
     public ResponseEntity<TbpostDto.CreateResDto> update(@Valid @RequestBody TbpostDto.UpdateReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.update(param));
-    }
+    } //@RequestBody 정보 생성 / 수정 할때 등등 조회할때는 requestparam (없어도 됨)
 
     @Operation(summary = "게시글 조회",
             description = "게시글 조회 컨트롤러 (사용자만 접근 가능) <br />"
@@ -49,7 +49,7 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("")
-    public ResponseEntity<TbpostDto.SelectResDto> detail(@Valid @RequestBody TbpostDto.SelectReqDto param){
+    public ResponseEntity<TbpostDto.SelectResDto> detail(@Valid TbpostDto.SelectReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(param));
     }
 
