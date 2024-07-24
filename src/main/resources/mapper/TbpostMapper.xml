@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.thc.smspr2.mapper.TbpostMapper">
+<mapper namespace="com.example.smspr2.mapper.TbpostMapper">
 
     <!---->
-    <select id="detail" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$SelectResDto">
+    <select id="detail" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
         SELECT tbpost.id
              ,tbpost.deleted
              ,tbpost.process
@@ -16,7 +16,7 @@
         FROM tbpost
         WHERE tbpost.id = #{id}
     </select>
-    <select id="list" parameterType="hashMap" resultType="com.thc.smspr2.dto.TbpostDto$SelectResDto">
+    <select id="list" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
         SELECT tbpost.id
         FROM tbpost
         WHERE tbpost.id is not NULL
@@ -24,6 +24,61 @@
         <if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
         <if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
         ORDER BY tbpost.created_at DESC
+    </select>
+
+    <select id="scrollList" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
+        SELECT tbpost.id
+        FROM tbpost
+        WHERE tbpost.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
+        <if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
+        <if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
+
+        <if test = "orderby =='created_at'">
+            <if test = "orderway =='desc'">
+                <if test = "cursor != null and cursor !=''">AND STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f') > tbpost.created_at </if>
+                ORDER BY tbpost.created_at DESC
+            </if>
+            <if test = "orderway =='asc'">
+                <if test = "cursor != null and cursor !=''">AND tbpost.created_at > STR_TO_DATE(#{cursor}, '%Y-%m-%d %H:%i:%s.%f')</if>
+                ORDER BY tbpost.created_at ASC
+            </if>
+        </if>
+        <if test = "orderby =='title'">
+            <if test = "orderway =='desc'">
+                <if test = "cursor != null and cursor !=''">AND #{cursor} > tbpost.title</if>
+                ORDER BY tbpost.title DESC
+            </if>
+            <if test = "orderway =='asc'">
+                <if test = "cursor != null and cursor !=''">AND tbpost.title > #{cursor}</if>
+                ORDER BY tbpost.title ASC
+            </if>
+        </if>
+        LIMIT 0, #{perpage}
+    </select>
+
+    <select id="pagedList" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
+        SELECT tbpost.id
+        FROM tbpost
+        WHERE tbpost.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
+        <if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
+        <if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
+
+        <if test = "orderby =='created_at'">ORDER BY tbpost.created_at </if>
+        <if test = "orderby =='title'">ORDER BY tbpost.title </if>
+        <if test = "orderway =='asc'">ASC</if>
+        <if test = "orderway =='desc'">DESC</if>
+        LIMIT #{offset}, #{perpage}
+    </select>
+
+    <select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+        SELECT count(tbpost.id) as listsize
+        FROM tbpost
+        WHERE tbpost.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
+        <if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
+        <if test = "author != null and author !=''">AND tbpost.author LIKE CONCAT('%', #{author}, '%')</if>
     </select>
 
 </mapper>

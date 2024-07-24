@@ -3,16 +3,14 @@ management.endpoints.web.exposure.include: "*"
 
 logging:
   level:
-    com.thc.basespr: debug
+    com.example.smspr2: debug
     org.springframework.web.servlet: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 spring:
-  datasource:
-    url: jdbc:mysql://www.adapter-gwangalli.com:3306/scjungwon?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: root
-    password: ivill0080@
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    import:
+      - classpath:/yaml/application-keys.yaml
   jpa:
     defer-datasource-initialization: true
     hibernate.ddl-auto: update

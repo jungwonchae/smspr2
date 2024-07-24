@@ -37,8 +37,8 @@ public class Tbpost extends AuditingFields {
         return new Tbpost(title, author, content);
     }
     public TbpostDto.CreateResDto toCreateResDto() {
-        TbpostDto.CreateResDto createResDto1 = new TbpostDto.CreateResDto();
-        createResDto1.setId(this.getId());
+//        TbpostDto.CreateResDto createResDto1 = new TbpostDto.CreateResDto();
+//        createResDto1.setId(this.getId());
         return TbpostDto.CreateResDto.builder().id(this.getId()).build();
     }
 

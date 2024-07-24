@@ -8,34 +8,53 @@
 </head>
 <body>
 id :
-<input id="detail_tbpost_id" type="text" />
+<input id="detail_tbboard_id" type="text" readonly/>
 title :
-<input id="detail_tbpost_title" type="text" />
+<input id="detail_tbboard_title" type="text" />
 author :
-<input id="detail_tbpost_author" type="text" />
+<input id="detail_tbboard_author" type="text" />
 content :
-<input id="detail_tbpost_content" type="text" />
+<input id="detail_tbboard_content" type="text" />
 
-<button onclick="detail_tbpost()">detail</button>
-<button onclick="update_tbpost()">update</button>
-
+<button onclick="detail_tbboard()">detail</button>
+<button onclick="update_tbboard()">update</button>
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        detail_tbboard();
+    });
+</script>
 <script>
     function getIdFromUrl(obj){
-        let
+        let temp_url_with_idx = obj;
+        if(obj == null){
+            temp_url_with_idx = window.location.href;
+            // => http://localhost:8080/tbboard/detail/963e1e8f040a43a88d5213598aaebc61
+        }
+        let split_slash_temp_idx = temp_url_with_idx.split('/');
+        let temp_idx = split_slash_temp_idx[split_slash_temp_idx.length - 1];
+        let split_question_temp_idx = temp_idx.split('?');
+        if(split_question_temp_idx.length > 0){
+            temp_idx = split_question_temp_idx[0];
+        }
+        return temp_idx;
     }
-    function detail_tbpost(){
+    function detail_tbboard(){
         $.ajax({
-            url: "/api/tbpost",
+            url: "/api/tbboard",
             type: "GET",
             contentType : 'application/json; charset=utf-8',
             data: {
-                id : $("#detail_tbpost_id").val()
+                id : getIdFromUrl(null)
             },
             cache: false,
             success: (data, status, xhr)=>{
                 //alert("success!!");
-                alert(JSON.stringify(data));
-                $("#detail_tbpost_title").val(data["title"]);
+                //alert(JSON.stringify(data));
+                $("#detail_tbboard_id").val(data["id"]);
+                $("#detail_tbboard_title").val(data["title"]);
+                $("#detail_tbboard_author").val(data["author"]);
+                $("#detail_tbboard_content").val(data["content"]);
             },
             error: (data, status, xhr)=>{
                 alert("error!!");
@@ -44,20 +63,21 @@ content :
         });
     }
 
-    function update_tbpost(){
+    function update_tbboard(){
         $.ajax({
-            url: "/api/tbpost",
+            url: "/api/tbboard",
             type: "PUT",
             contentType : 'application/json; charset=utf-8',
             data: JSON.stringify({
-                id : $("#detail_tbpost_id").val()
-                ,title : $("#detail_tbpost_title").val()
+                id : $("#detail_tbboard_id").val()
+                ,title : $("#detail_tbboard_title").val()
+                ,author : $("#detail_tbboard_author").val()
+                ,content : $("#detail_tbboard_content").val()
             }),
             cache: false,
             success: (data, status, xhr)=>{
                 //alert("success!!");
                 alert(JSON.stringify(data));
-                $("#detail_tbpost_title").val(data["title"]);
             },
             error: (data, status, xhr)=>{
                 alert("error!!");
