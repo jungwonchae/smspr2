@@ -1,6 +1,6 @@
 package com.example.smspr2.dto;
 
-import com.example.smspr2.domain.Tbpost;
+import com.example.smspr2.domain.Tbpostcmt;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -41,8 +41,8 @@ public class TbpostcmtDto {
         @Schema(description = "tbpostfileUrls", example = "")
         private List<String> tbpostfileUrls;
 
-        public Tbpost toEntity(){
-            return Tbpost.of(tbuserId, title, content);
+        public Tbpostcmt toEntity(){
+            return Tbpostcmt.of(tbuserId, title, content);
         }
 
     }

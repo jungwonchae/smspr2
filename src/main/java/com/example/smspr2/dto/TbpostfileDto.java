@@ -1,6 +1,6 @@
 package com.example.smspr2.dto;
 
-import com.example.smspr2.domain.Tbpost;
+import com.example.smspr2.domain.Tbpostfile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -33,8 +33,8 @@ public class TbpostfileDto {
         @Size(max=400)
         private String url;
 
-        public Tbpost toEntity(){
-            return Tbpost.of(tbpostId, type, url);
+        public Tbpostfile toEntity(){
+            return Tbpostfile.of(tbpostId, type, url);
         }
 
     }
