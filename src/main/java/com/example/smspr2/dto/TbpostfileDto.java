@@ -8,10 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 // 들어오는 데이터를 어떤 형태로 줄지 담당하는 테이블
-public class TbpostDto {
+public class TbpostfileDto {
 
     @Builder
     @Schema
@@ -20,24 +18,23 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CreateReqDto{
-        @Schema(description = "title", example ="")
+        @Schema(description = "tbpostId", example ="")
         @NotNull
         @NotEmpty
-        @Size(max=400)
-        private String title;
+        private String tbpostId;
 
-        @Schema(description = "author", example ="")
+        @Schema(description = "type", example ="")
         @NotNull
         @NotEmpty
-        @Size(max=400)
-        private String author;
+        @Size(max = 100)
+        private String type;
 
-        @Schema(description = "content", example ="")
-        @Size(max=4000)
-        private String content;
+        @Schema(description = "url", example ="")
+        @Size(max=400)
+        private String url;
 
         public Tbpost toEntity(){
-            return Tbpost.of(title, author, content);
+            return Tbpost.of(tbpostId, type, url);
         }
 
     }
@@ -59,15 +56,14 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UpdateReqDto extends DefaultDto.UpdateReqDto{
-        @Schema(description = "title", example="")
+        @Schema(description = "tbpostId", example="")
+        private String tbpostId;
+        @Schema(description = "type", example="")
+        @Size(max=100)
+        private String type;
+        @Schema(description = "url", example="")
         @Size(max=400)
-        private String title;
-        @Schema(description = "author", example="")
-        @Size(max=400)
-        private String author;
-        @Schema(description = "content", example="")
-        @Size(max=4000)
-        private String content;
+        private String url;
     }
 
 
@@ -75,12 +71,10 @@ public class TbpostDto {
     @Getter
     @Setter
     public static class DetailResDto extends DefaultDto.DetailResDto{
-        @Schema(description = "title", example="")
-        private String title;
-        @Schema(description = "author", example="")
-        private String author;
-        @Schema(description = "content", example="")
-        private String content;
+        @Schema(description = "tbpostId", example="")
+        private String type;
+        @Schema(description = "url", example="")
+        private String url;
     }
 
     @SuperBuilder
@@ -90,10 +84,10 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ListReqDto extends DefaultDto.ListReqDto{
-        @Schema(description = "title", example="")
-        private String title;
-        @Schema(description = "author", example="")
-        private String author;
+        @Schema(description = "tbpostId", example="")
+        private String tbpostId;
+        @Schema(description = "type", example="")
+        private String type;
     }
 
     @SuperBuilder
@@ -103,10 +97,10 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PagedListReqDto extends DefaultDto.PagedListReqDto{
-        @Schema(description = "title", example="")
-        private String title;
-        @Schema(description = "author", example="")
-        private String author;
+        @Schema(description = "tbpostId", example="")
+        private String tbpostId;
+        @Schema(description = "type", example="")
+        private String type;
     }
 
     @SuperBuilder
@@ -116,9 +110,10 @@ public class TbpostDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ScrollListReqDto extends DefaultDto.ScrollListReqDto{
-        private String title;
-        @Schema(description = "author", example="")
-        private String author;
+        @Schema(description = "tbpostId", example="")
+        private String tbpostId;
+        @Schema(description = "type", example="")
+        private String type;
     }
 
 }

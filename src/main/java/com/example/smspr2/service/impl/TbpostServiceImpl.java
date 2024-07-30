@@ -1,21 +1,23 @@
 package com.example.smspr2.service.impl;
 
 import com.example.smspr2.domain.Tbpost;
+import com.example.smspr2.dto.DefaultDto;
 import com.example.smspr2.dto.TbpostDto;
 import com.example.smspr2.mapper.TbpostMapper;
 import com.example.smspr2.repository.TbpostRepository;
 import com.example.smspr2.service.TbpostService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TbpostServiceImpl implements TbpostService {
 
-    private TbpostRepository tbpostRepository;
-    private TbpostMapper tbpostMapper;
-
+    private final TbpostRepository tbpostRepository;
+    private final TbpostMapper tbpostMapper;
     public TbpostServiceImpl(
             TbpostRepository tbpostRepository
             ,TbpostMapper tbpostMapper
@@ -25,16 +27,18 @@ public class TbpostServiceImpl implements TbpostService {
     }
 
     @Override
-    public TbpostDto.CreateResDto create(TbpostDto.CreateReqDto param) {
-        Tbpost tbpost = tbpostRepository.save(param.toEntity());
-        return tbpost.toCreateResDto();
+    public TbpostDto.CreateResDto create(TbpostDto.CreateReqDto param){
+        return tbpostRepository.save(param.toEntity()).toCreateResDto();
     }
 
     @Override
-    public TbpostDto.CreateResDto update(TbpostDto.UpdateReqDto param) {
+    public TbpostDto.CreateResDto update(TbpostDto.UpdateReqDto param){
         Tbpost tbpost = tbpostRepository.findById(param.getId()).orElseThrow(()->new RuntimeException("no data"));
         if(param.getTitle() != null){
             tbpost.setTitle(param.getTitle());
+        }
+        if(param.getAuthor() != null){
+            tbpost.setAuthor(param.getAuthor());
         }
         if(param.getContent() != null){
             tbpost.setContent(param.getContent());
@@ -44,119 +48,35 @@ public class TbpostServiceImpl implements TbpostService {
     }
 
     @Override
-    public TbpostDto.SelectResDto detail(TbpostDto.SelectReqDto param) {
-
-        /*
-        Tbpost tbpost = tbpostRepository.findById(param.getId()).orElseThrow(()->new RuntimeException("no data"));
-        TbpostDto.SelectResDto selectResDto =  TbpostDto.SelectResDto.builder()
-                .id(tbpost.getId())
-                .createdAt(tbpost.getCreatedAt() + "")
-                .deleted(tbpost.getDeleted())
-                .title(tbpost.getTitle())
-                .author(tbpost.getAuthor())
-                .content(tbpost.getContent())
-                .build();
-         */
-        TbpostDto.SelectResDto selectResDto = tbpostMapper.detail(param);
-        if(selectResDto == null){
-            throw new RuntimeException("no data");
-        }
-        return selectResDto;
+    public TbpostDto.DetailResDto detail(DefaultDto.DetailReqDto param){
+        TbpostDto.DetailResDto detailResDto = tbpostMapper.detail(param);
+        if(detailResDto == null){ throw new RuntimeException("no data"); }
+        return detailResDto;
     }
 
     @Override
-    public List<TbpostDto.SelectResDto> list(TbpostDto.ListReqDto param) {
-        List<TbpostDto.SelectResDto> list = tbpostMapper.list(param);
-        //리스트만 넘기는게 아니라 detail에서 상세 정보 가져오기
-        List<TbpostDto.SelectResDto> newList = new ArrayList<>();
-        for(TbpostDto.SelectResDto each : list){
-            newList.add(detail(TbpostDto.SelectReqDto.builder().id(each.getId()).build()));
-        }
-        return newList;
+    public List<TbpostDto.DetailResDto> list(TbpostDto.ListReqDto param){
+        return detailList(tbpostMapper.list(param));
     }
 
     @Override
-    public TbpostDto.PagedListResDto pagedList(TbpostDto.PagedListReqDto param) {
-
-        String orderby = param.getOrderby();
-        if(orderby == null || orderby.isEmpty()){
-            orderby = "created_at";
-        }
-        String orderway = param.getOrderway();
-        if(orderway == null || orderway.isEmpty()){
-            orderway = "desc";
-        }
-        Integer perpage = param.getPerpage();
-        if(perpage == null || perpage<1){ //한번에 조회할 글 갯수
-            perpage = 10;
-        }
-        Integer callpage = param.getCallpage();
-        if(callpage == null){ //호출하는 페이지
-            callpage = 1;
-        }
-        if(callpage < 1){
-            callpage = 1;
-        }
-
-        //offset을 구하기 위해 전체 글 개수 가지고 오기
-        int listsize = tbpostMapper.pagedListCount(param);
-        int pagesize = listsize / perpage;
-        if(listsize % perpage > 0){
-            pagesize++;
-        }
-        if(callpage > pagesize){
-            callpage = pagesize;
-        }
-        int offset = (callpage - 1) * perpage;
-
-        param.setOrderby(orderby);
-        param.setOrderway(orderway);
-        param.setOffset(offset);
-        param.setPerpage(perpage);
-
-        List<TbpostDto.SelectResDto> list = tbpostMapper.pagedList(param);
-        List<TbpostDto.SelectResDto> newList = new ArrayList<>();
-        for(TbpostDto.SelectResDto each : list){
-            newList.add(detail(TbpostDto.SelectReqDto.builder().id(each.getId()).build()));
-        }
-
-        TbpostDto.PagedListResDto returnVal =
-                TbpostDto.PagedListResDto.builder()
-                        .callpage(callpage)
-                        .perpage(perpage)
-                        .orderby(orderby)
-                        .orderway(orderway)
-                        .listsize(listsize)
-                        .pagesize(pagesize)
-                        .list(newList)
-                        .build();
-
-        return returnVal;
+    public DefaultDto.PagedListResDto pagedList(TbpostDto.PagedListReqDto param){
+        int[] returnSize = param.init(tbpostMapper.pagedListCount(param));
+        return param.afterBuild(returnSize, detailList(tbpostMapper.pagedList(param)));
     }
 
     @Override
-    public List<TbpostDto.SelectResDto> scrollList(TbpostDto.ScrollListReqDto param) {
+    public List<TbpostDto.DetailResDto> scrollList(TbpostDto.ScrollListReqDto param){
+        param.init();
+        return detailList(tbpostMapper.scrollList(param));
+    }
 
-        String orderby = param.getOrderby();
-        if(orderby == null || orderby.isEmpty()){
-            orderby = "created_at";
-            param.setOrderby(orderby);
-        }
-        String orderway = param.getOrderway();
-        if(orderway == null || orderway.isEmpty()){
-            orderway = "desc";
-            param.setOrderway(orderway);
-        }
-        Integer perpage = param.getPerpage();
-        if(perpage == null || perpage<1){
-            //한 번에 조회할 글 개수
-            perpage = 10;
-            param.setPerpage(perpage);
-        }
-        List<TbpostDto.SelectResDto> list = tbpostMapper.scrollList(param);
-        List<TbpostDto.SelectResDto> newList = new ArrayList<>();
-        for(TbpostDto.SelectResDto each : list){
-            newList.add(detail(TbpostDto.SelectReqDto.builder().id(each.getId()).build()));
+    //
+
+    public List<TbpostDto.DetailResDto> detailList(List<TbpostDto.DetailResDto> list){
+        List<TbpostDto.DetailResDto> newList = new ArrayList<>();
+        for(TbpostDto.DetailResDto each : list){
+            newList.add(detail(DefaultDto.DetailReqDto.builder().id(each.getId()).build()));
         }
         return newList;
     }

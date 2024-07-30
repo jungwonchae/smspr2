@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.smspr2.mapper.TbpostMapper">
+<mapper namespace="com.example.smspr2.mapper.tbpostMapper">
 
     <!---->
-    <select id="detail" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
+    <select id="detail" parameterType="hashMap" resultType="com.example.smspr2.dto.tbpostDto$DetailResDto">
         SELECT tbpost.id
              ,tbpost.deleted
              ,tbpost.process
@@ -16,7 +16,7 @@
         FROM tbpost
         WHERE tbpost.id = #{id}
     </select>
-    <select id="list" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
+    <select id="list" parameterType="hashMap" resultType="com.example.smspr2.dto.tbpostDto$DetailResDto">
         SELECT tbpost.id
         FROM tbpost
         WHERE tbpost.id is not NULL
@@ -26,7 +26,7 @@
         ORDER BY tbpost.created_at DESC
     </select>
 
-    <select id="scrollList" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
+    <select id="scrollList" parameterType="hashMap" resultType="com.example.smspr2.dto.tbpostDto$DetailResDto">
         SELECT tbpost.id
         FROM tbpost
         WHERE tbpost.id is not NULL
@@ -57,7 +57,7 @@
         LIMIT 0, #{perpage}
     </select>
 
-    <select id="pagedList" parameterType="hashMap" resultType="com.example.smspr2.dto.TbpostDto$SelectResDto">
+    <select id="pagedList" parameterType="hashMap" resultType="com.example.smspr2.dto.tbpostDto$DetailResDto">
         SELECT tbpost.id
         FROM tbpost
         WHERE tbpost.id is not NULL

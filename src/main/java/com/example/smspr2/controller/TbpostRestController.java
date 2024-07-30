@@ -1,5 +1,6 @@
 package com.example.smspr2.controller;
 
+import com.example.smspr2.dto.DefaultDto;
 import com.example.smspr2.dto.TbpostDto;
 import com.example.smspr2.service.TbpostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,19 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Tag(name = "1-1. 게시글 API 안내",
         description = "게시글 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbpost")
 @RestController
 public class TbpostRestController {
 
-    private TbpostService tbpostService;
+    private final TbpostService tbpostService;
     public TbpostRestController(TbpostService tbpostService) {
         this.tbpostService = tbpostService;
     }
 
     @Operation(summary = "게시글 생성",
-            description = "게시글 생성 컨트롤러 (사용자만 접근 가능) <br />"
+            description = "게시글 생성 컨트롤러 <br />"
                     + "@param TbpostDto.CreateReqDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbpostDto.CreateResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
@@ -33,16 +35,17 @@ public class TbpostRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(tbpostService.create(param));
     }
 
+
     @Operation(summary = "게시글 수정",
-            description = "게시글 수정 컨트롤러 (사용자만 접근 가능) <br />"
+            description = "게시글 수정 컨트롤러 <br />"
                     + "@param TbpostDto.UpdateReqDto <br />"
-                    + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbpostDto.CreateResDto\\> <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostDto.CreateResDto\\> <br />"
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @PutMapping("")
     public ResponseEntity<TbpostDto.CreateResDto> update(@Valid @RequestBody TbpostDto.UpdateReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.update(param));
-    } //@RequestBody 정보 생성 / 수정 할때 등등 조회할때는 requestparam (없어도 됨)
+    }
 
     @Operation(summary = "게시글 상세 조회",
             description = "게시글 상세 조회 컨트롤러 <br />"
@@ -51,7 +54,7 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("")
-    public ResponseEntity<TbpostDto.SelectResDto> detail(@Valid TbpostDto.SelectReqDto param){
+    public ResponseEntity<TbpostDto.DetailResDto> detail(@Valid DefaultDto.DetailReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(param));
     }
     @Operation(summary = "게시글 목록 전체 조회",
@@ -61,7 +64,7 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/list")
-    public ResponseEntity<List<TbpostDto.SelectResDto>> list(@Valid TbpostDto.ListReqDto param){
+    public ResponseEntity<List<TbpostDto.DetailResDto>> list(@Valid TbpostDto.ListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.list(param));
     }
 
@@ -72,7 +75,7 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/plist")
-    public ResponseEntity<TbpostDto.PagedListResDto> plist(@Valid TbpostDto.PagedListReqDto param){
+    public ResponseEntity<DefaultDto.PagedListResDto> plist(@Valid TbpostDto.PagedListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.pagedList(param));
     }
     @Operation(summary = "게시글 목록 스크롤 조회",
@@ -82,9 +85,8 @@ public class TbpostRestController {
                     + "@exception 필수 파라미터 누락하였을 때 등 <br />"
     )
     @GetMapping("/mlist")
-    public ResponseEntity<List<TbpostDto.SelectResDto>> mlist(@Valid TbpostDto.ScrollListReqDto param){
+    public ResponseEntity<List<TbpostDto.DetailResDto>> mlist(@Valid TbpostDto.ScrollListReqDto param){
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.scrollList(param));
     }
-
 
 }

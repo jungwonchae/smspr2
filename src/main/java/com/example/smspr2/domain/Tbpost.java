@@ -33,9 +33,11 @@ public class Tbpost extends AuditingFields {
         this.author = author;
         this.content = content;
     }
+
     public static Tbpost of(String title, String author, String content) {
         return new Tbpost(title, author, content);
     }
+
     public TbpostDto.CreateResDto toCreateResDto() {
 //        TbpostDto.CreateResDto createResDto1 = new TbpostDto.CreateResDto();
 //        createResDto1.setId(this.getId());
